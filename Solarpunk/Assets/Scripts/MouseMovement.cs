@@ -6,9 +6,11 @@ public class MouseMovement : MonoBehaviour
 {
 
     public float mouseSensitivity = 100f;
+    public Transform playerTransform;
+    public Transform cameraTransform;
 
-    float xRotation = 0f;
-    float YRotation = 0f;
+    float playerRotation = 0f;
+    float cameraRotation = 0f;
 
     void Start()
     {
@@ -21,18 +23,21 @@ public class MouseMovement : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        //control rotation around x axis (Look up and down)
-        xRotation -= mouseY;
+        // Control rotation around y-axis (Look left and right)
+        playerRotation += mouseX;
 
-        //we clamp the rotation so we cant Over-rotate (like in real life)
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        // Apply rotation to the player
+        playerTransform.localRotation = Quaternion.Euler(0f, playerRotation, 0f);
 
-        //control rotation around y axis (Look up and down)
-        YRotation += mouseX;
+        // Control rotation around x-axis (Look up and down)
+        cameraRotation -= mouseY;
 
-        //applying both rotations
-        transform.localRotation = Quaternion.Euler(xRotation, YRotation, 0f);
+        // Clamp the camera rotation so it doesn't over-rotate
+        cameraRotation = Mathf.Clamp(cameraRotation, -90f, 90f);
 
+        // Apply rotation to the camera
+        cameraTransform.localRotation = Quaternion.Euler(cameraRotation, 0f, 0f);
+ 
     }
 
 }
